@@ -18,6 +18,36 @@ struct Catalog {
   let entries: [Entry]
 }
 
+extension Catalog.Entry: Equatable {
+  static func ==(lhs: Catalog.Entry, rhs: Catalog.Entry) -> Bool {
+    switch (lhs, rhs) {
+    case (.group(let lhsName, let lhsItems), .group(let rhsName, let rhsItems)):
+      return lhsName == rhsName && lhsItems == rhsItems
+    case (.color(let lhsName, let lhsValue), .color(let rhsName, let rhsValue)):
+      return lhsName == rhsName && lhsValue == rhsValue
+    case (.image(let lhsName, let lhsValue), .image(let rhsName, let rhsValue)):
+      return lhsName == rhsName && lhsValue == rhsValue
+    default:
+      return false
+    }
+  }
+}
+
+extension Catalog.Entry: Comparable {
+  static func <(lhs: Catalog.Entry, rhs: Catalog.Entry) -> Bool {
+    switch (lhs, rhs) {
+    case (.group(let lhsName, _), .group(let rhsName, _)):
+      return lhsName < rhsName
+    case (.color(let lhsName, _), .color(let rhsName, _)):
+      return lhsName < rhsName
+    case (.image(let lhsName, _), .image(let rhsName, _)):
+      return lhsName < rhsName
+    default:
+      return false
+    }
+  }
+}
+
 public final class AssetsCatalogParser: Parser {
   public enum Error: Swift.Error, CustomStringConvertible {
     case invalidFile
