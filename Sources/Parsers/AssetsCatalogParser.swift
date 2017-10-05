@@ -112,7 +112,7 @@ extension AssetsCatalogParser {
   func process(folder: Path, withPrefix prefix: String = "") -> [Catalog.Entry] {
     return (try? folder.children().flatMap {
       process(item: $0, withPrefix: prefix)
-    }) ?? []
+    })?.sorted(by: <) ?? []
   }
 
   /**
